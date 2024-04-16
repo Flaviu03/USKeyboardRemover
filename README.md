@@ -1,0 +1,1 @@
+Counter-Strike 2 and other games add a new layout to windows on game startup, this being en_US layout. This program stays on background and checks if the layout gets added, if it does, it will remove it.

@@ -24,6 +24,8 @@ bool isEnUSLayoutActive() {
         return false;
     }
 
+    //Will loop until it detects the layout.
+
     HKL* layouts = new HKL[numLayouts];
     GetKeyboardLayoutList(numLayouts, layouts);
 
@@ -65,37 +67,19 @@ void backgroundProcess() {
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     switch (uMsg) {
         case WM_CREATE:
-            {
-                NOTIFYICONDATA nid;
-                nid.cbSize = sizeof(NOTIFYICONDATA);
-                nid.hWnd = hwnd;
-                nid.uID = 1;
-                nid.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP;
-                nid.uCallbackMessage = WM_USER + 1;
-                nid.hIcon = LoadIcon(NULL, IDI_APPLICATION);
-                lstrcpy(nid.szTip, TEXT("US Layout Remover"));
-                Shell_NotifyIcon(NIM_ADD, &nid);
-            }
-            break;
+                break;
         case WM_DESTROY:
-            {
-                NOTIFYICONDATA nid;
-                nid.cbSize = sizeof(NOTIFYICONDATA);
-                nid.hWnd = hwnd;
-                nid.uID = 1;
-                Shell_NotifyIcon(NIM_DELETE, &nid);
-            }
-            PostQuitMessage(0);
-            break;
+                PostQuitMessage(0);
+        break;
         case WM_USER + 1:
-            if (LOWORD(lParam) == WM_RBUTTONUP) {
-                HMENU hPopupMenu = CreatePopupMenu();
-                SetForegroundWindow(hwnd);
-                POINT pt;
-                GetCursorPos(&pt);
-                TrackPopupMenu(hPopupMenu, TPM_BOTTOMALIGN | TPM_LEFTALIGN, pt.x, pt.y, 0, hwnd, NULL);
-            }
-            break;
+                if (LOWORD(lParam) == WM_RBUTTONUP) {
+                    HMENU hPopupMenu = CreatePopupMenu();
+                    SetForegroundWindow(hwnd);
+                    POINT pt;
+                    GetCursorPos(&pt);
+                    TrackPopupMenu(hPopupMenu, TPM_BOTTOMALIGN | TPM_LEFTALIGN, pt.x, pt.y, 0, hwnd, NULL);
+                }
+        break;
         default:
             return DefWindowProc(hwnd, uMsg, wParam, lParam);
     }
